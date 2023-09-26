@@ -1,31 +1,9 @@
-import { http } from "@ampt/sdk";
-import express, { Router } from "express";
+import { task } from "@ampt/sdk";
 
-const app = express();
+const feedUrl = 'https://aws.amazon.com/it/blogs/machine-learning/feed/';
 
-const api = Router();
-
-api.get("/hello", (req, res) => {
-  return res.status(200).send({ message: "Hello from the public api!" });
+const feedFetchTask = task("my task", async () => {
+  console.log(`Fetching feed ${feedUrl}`);
 });
 
-api.get("/greet/:name", (req, res) => {
-  const { name } = req.params;
-
-  if (!name) {
-    return res.status(400).send({ message: "Missing route param for `name`!" });
-  }
-
-  return res.status(200).send({ message: `Hello ${name}!` });
-});
-
-api.post("/submit", async (req, res) => {
-  return res.status(200).send({
-    body: req.body,
-    message: "You just posted data",
-  });
-});
-
-app.use("/api", api);
-
-http.node.use(app);
+feedFetchTask.run();
